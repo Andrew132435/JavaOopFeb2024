@@ -35,7 +35,10 @@ public class Main {
 
         Range range2 = new Range(3, 6);
 
-        System.out.println("Проверка на пересечение интервалов: " + range1.getIntersection(range2));
+        System.out.println("Найдём пересечение, объединение и разность для интервалов: " + range1 +
+                " и " + range2);
+
+        System.out.println("Результат пересечения интервалов: " + range1.getIntersection(range2));
 
         Range[] union = range1.getUnion(range2);
         System.out.println("Результат объединения интервалов: " + Arrays.toString(union));
