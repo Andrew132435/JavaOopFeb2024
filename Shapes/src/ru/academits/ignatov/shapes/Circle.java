@@ -1,5 +1,7 @@
 package ru.academits.ignatov.shapes;
 
+import java.util.StringJoiner;
+
 public class Circle implements Shape {
     private double radius;
 
@@ -33,5 +35,34 @@ public class Circle implements Shape {
     @Override
     public double getPerimeter() {
         return 2 * Math.PI * radius;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Circle.class.getSimpleName() + "[", "]")
+                .add("radius = '" + radius + "'")
+                .toString();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 37;
+        int hash = 1;
+        hash = prime * hash * Double.hashCode(radius);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != getClass()) {
+            return false;
+        }
+
+        Circle circle = (Circle) o;
+        return radius == circle.radius;
     }
 }
