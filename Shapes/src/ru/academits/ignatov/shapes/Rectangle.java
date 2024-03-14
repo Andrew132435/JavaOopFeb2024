@@ -1,7 +1,5 @@
 package ru.academits.ignatov.shapes;
 
-import java.util.StringJoiner;
-
 public class Rectangle implements Shape {
     private double width;
     private double height;
@@ -41,10 +39,7 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Rectangle.class.getSimpleName() + "[", "]")
-                .add("width = '" + width + "'")
-                .add("height = '" + height + "'")
-                .toString();
+        return "Rectangle = {width = " + width + ", height = " + height + "}";
     }
 
     @Override

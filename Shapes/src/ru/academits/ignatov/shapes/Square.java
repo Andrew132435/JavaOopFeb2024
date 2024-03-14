@@ -1,7 +1,5 @@
 package ru.academits.ignatov.shapes;
 
-import java.util.StringJoiner;
-
 public class Square implements Shape {
     private double sideLength;
 
@@ -39,17 +37,13 @@ public class Square implements Shape {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Square.class.getSimpleName() + "[", "]")
-                .add("sideLength = '" + sideLength + "'")
-                .toString();
+        return "Square = {size = " + sideLength + "}";
     }
 
     @Override
     public int hashCode() {
         final int prime = 37;
-        int hash = 1;
-        hash = prime * hash * Double.hashCode(sideLength);
-        return hash;
+        return prime + Double.hashCode(sideLength);
     }
 
     @Override

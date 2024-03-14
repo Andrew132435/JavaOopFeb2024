@@ -1,7 +1,5 @@
 package ru.academits.ignatov.shapes;
 
-import java.util.StringJoiner;
-
 public class Triangle implements Shape {
     private double x1;
     private double y1;
@@ -87,20 +85,13 @@ public class Triangle implements Shape {
         return getSideLength(x1, y1, x2, y2) + getSideLength(x2, y2, x3, y3) + getSideLength(x1, y1, x3, y3);
     }
 
-    private double getSideLength(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Triangle.class.getSimpleName() + "[", "]")
-                .add("x1 = '" + x1 + "'")
-                .add("y1 = '" + y1 + "'")
-                .add("x2 = '" + x2 + "'")
-                .add("y2 = '" + y2 + "'")
-                .add("x3 = '" + x3 + "'")
-                .add("y3 = '" + y3 + "'")
-                .toString();
+        return "Triangle = {(" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + ")}";
     }
 
     @Override
