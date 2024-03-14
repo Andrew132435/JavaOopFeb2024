@@ -1,7 +1,7 @@
 package ru.academits.ignatov.shapes_main;
 
-import ru.academits.ignatov.comparators.AreaComparator;
-import ru.academits.ignatov.comparators.PerimeterComparator;
+import ru.academits.ignatov.shapes.comparators.AreaComparator;
+import ru.academits.ignatov.shapes.comparators.PerimeterComparator;
 import ru.academits.ignatov.shapes.*;
 
 import java.util.Arrays;
