@@ -1,4 +1,4 @@
-package ru.academits.ignatov.main;
+package ru.academits.ignatov.vector_main;
 
 import ru.academits.ignatov.vector.Vector;
 
@@ -15,12 +15,12 @@ public class Main {
 
         Vector copyVector = new Vector(vector3);
         System.out.println("Скопировали vector3: " + copyVector);
-        System.out.println("Количество компонент в vector3: " + copyVector.getSize());
+        System.out.println("Количество компонент в vector3: " + copyVector.getComponentsCount());
 
-        vector2.addition(vector3);
+        vector2.getAddition(vector3);
         System.out.println("Результат сложения vector2 и vector3: " + vector2);
 
-        copyVector.subtraction(vector3);
+        copyVector.getSubtraction(vector3);
         System.out.println("Результат вычитания vector3 из copyVector: " + copyVector);
 
         vector3.multiplyByScalar(2);
@@ -39,7 +39,7 @@ public class Main {
         Vector vector5 = new Vector(1.1, 2, 3, 4, 5);
         Vector vector6 = new Vector(-1.1, -2, -3, -4, -5, -6);
         System.out.println("Сумма vector5 и vector6: " + Vector.getSum(vector5, vector6));
-        System.out.println("Разница vector5 и vector6: " + Vector.getDiff(vector5, vector6));
-        System.out.println("Скалярное произведение vector5 и vector6: " + Vector.getScalarMultiplication(vector5, vector6));
+        System.out.println("Разница vector5 и vector6: " + Vector.getDifference(vector5, vector6));
+        System.out.println("Скалярное произведение vector5 и vector6: " + Vector.getScalarProduct(vector5, vector6));
     }
 }

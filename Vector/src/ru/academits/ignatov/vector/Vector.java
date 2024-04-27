@@ -7,19 +7,19 @@ public class Vector {
 
     public Vector(int componentsCount) {
         if (componentsCount <= 0) {
-            throw new IllegalArgumentException("Количество компонент вектора должно быть больше нуля");
+            throw new IllegalArgumentException("Количество компонент должно быть больше 0, componentsCount = " + componentsCount);
         }
 
         components = new double[componentsCount];
     }
 
     public Vector(Vector vector) {
-        components = Arrays.copyOf(vector.components, vector.getSize());
+        components = Arrays.copyOf(vector.components, vector.components.length);
     }
 
     public Vector(double... components) {
         if (components.length == 0) {
-            throw new IllegalArgumentException("Количество компонент вектора должно быть больше нуля");
+            throw new IllegalArgumentException("Количество компонент = 0");
         }
 
         this.components = Arrays.copyOf(components, components.length);
@@ -27,46 +27,46 @@ public class Vector {
 
     public Vector(int componentsCount, double... components) {
         if (componentsCount <= 0) {
-            throw new IllegalArgumentException("Количество компонент вектора должно быть больше нуля");
+            throw new IllegalArgumentException("Количество компонент должно быть больше 0, componentsCount = " + componentsCount);
         }
 
         this.components = Arrays.copyOf(components, components.length);
     }
 
-    public int getSize() {
+    public int getComponentsCount() {
         return components.length;
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{");
+        stringBuilder.append('{');
 
         for (double component : components) {
             stringBuilder.append(component).append(", ");
         }
 
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("}");
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append('}');
 
         return stringBuilder.toString();
     }
 
-    public void addition(Vector vector) {
-        if (components.length < vector.getSize()) {
-            components = Arrays.copyOf(components, vector.getSize());
+    public void getAddition(Vector vector) {
+        if (components.length < vector.components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
-        for (int i = 0; i < vector.getSize(); i++) {
+        for (int i = 0; i < vector.components.length; i++) {
             components[i] += vector.components[i];
         }
     }
 
-    public void subtraction(Vector vector) {
-        if (components.length < vector.getSize()) {
-            components = Arrays.copyOf(components, vector.getSize());
+    public void getSubtraction(Vector vector) {
+        if (components.length < vector.components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
-        for (int i = 0; i < vector.getSize(); i++) {
+        for (int i = 0; i < vector.components.length; i++) {
             components[i] -= vector.components[i];
         }
     }
@@ -82,18 +82,19 @@ public class Vector {
     }
 
     public double getLength() {
-        double length = 0;
+        double sum = 0;
 
         for (double c : components) {
-            length += c * c;
+            sum += c * c;
         }
 
-        return Math.sqrt(length);
+        return Math.sqrt(sum);
     }
 
     public double getComponent(int index) {
         if (index < 0 || index >= components.length) {
-            throw new IndexOutOfBoundsException("Индекс " + index + " находится за пределами диапазона вектора");
+            throw new IndexOutOfBoundsException("Индекс " + index + " находится за пределами диапазона {0; "
+                    + (components.length - 1) + "}");
         }
 
         return components[index];
@@ -101,7 +102,8 @@ public class Vector {
 
     public void setComponent(int index, double component) {
         if (index < 0 || index >= components.length) {
-            throw new IndexOutOfBoundsException("Индекс " + index + " находится за пределами диапазона вектора");
+            throw new IndexOutOfBoundsException("Индекс " + index + " находится за пределами диапазона {0; "
+                    + (components.length - 1) + "}");
         }
 
         components[index] = component;
@@ -130,21 +132,21 @@ public class Vector {
     public static Vector getSum(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(vector1);
 
-        resultVector.addition(vector2);
+        resultVector.getAddition(vector2);
 
         return resultVector;
     }
 
-    public static Vector getDiff(Vector vector1, Vector vector2) {
+    public static Vector getDifference(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(vector1);
 
-        resultVector.subtraction(vector2);
+        resultVector.getSubtraction(vector2);
 
         return resultVector;
     }
 
-    public static double getScalarMultiplication(Vector vector1, Vector vector2) {
-        int minComponentsCount = Math.min(vector1.getSize(), vector2.getSize());
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
+        int minComponentsCount = Math.min(vector1.components.length, vector2.components.length);
         double result = 0;
 
         for (int i = 0; i < minComponentsCount; i++) {
