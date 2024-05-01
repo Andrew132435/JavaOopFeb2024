@@ -17,10 +17,10 @@ public class Main {
         System.out.println("Скопировали vector3: " + copyVector);
         System.out.println("Количество компонент в vector3: " + copyVector.getComponentsCount());
 
-        vector2.getAddition(vector3);
+        vector2.add(vector3);
         System.out.println("Результат сложения vector2 и vector3: " + vector2);
 
-        copyVector.getSubtraction(vector3);
+        copyVector.subtract(vector3);
         System.out.println("Результат вычитания vector3 из copyVector: " + copyVector);
 
         vector3.multiplyByScalar(2);

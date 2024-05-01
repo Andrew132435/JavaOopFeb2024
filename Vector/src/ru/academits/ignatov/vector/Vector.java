@@ -51,7 +51,7 @@ public class Vector {
         return stringBuilder.toString();
     }
 
-    public void getAddition(Vector vector) {
+    public void add(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
         }
@@ -61,7 +61,7 @@ public class Vector {
         }
     }
 
-    public void getSubtraction(Vector vector) {
+    public void subtract(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
         }
@@ -132,7 +132,7 @@ public class Vector {
     public static Vector getSum(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(vector1);
 
-        resultVector.getAddition(vector2);
+        resultVector.add(vector2);
 
         return resultVector;
     }
@@ -140,7 +140,7 @@ public class Vector {
     public static Vector getDifference(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(vector1);
 
-        resultVector.getSubtraction(vector2);
+        resultVector.subtract(vector2);
 
         return resultVector;
     }
