@@ -56,7 +56,7 @@ public class Matrix {
 
         rows = new Vector[array.length];
 
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < columnsCount; i++) {
             rows[i] = new Vector(columnsCount, array[i]);
         }
     }

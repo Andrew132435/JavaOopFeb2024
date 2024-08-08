@@ -30,7 +30,7 @@ public class Vector {
             throw new IllegalArgumentException("Количество компонент должно быть больше 0, componentsCount = " + componentsCount);
         }
 
-        this.components = Arrays.copyOf(components, components.length);
+        this.components = Arrays.copyOf(components, componentsCount);
     }
 
     public int getComponentsCount() {
