@@ -2,6 +2,8 @@ package ru.academits.ignatov.matrix;
 
 import ru.academits.ignatov.vector.Vector;
 
+import java.util.Arrays;
+
 public class Matrix {
     private Vector[] rows;
 
@@ -23,7 +25,7 @@ public class Matrix {
 
     public Matrix(Matrix matrix) {
         if (matrix == null) {
-            throw new NullPointerException("Переданная матрица отсутствует");
+            throw new NullPointerException("Переданная матрица должна быть не null");
         }
 
         rows = new Vector[matrix.rows.length];
@@ -35,7 +37,7 @@ public class Matrix {
 
     public Matrix(double[][] array) {
         if (array == null) {
-            throw new NullPointerException("Переданный массив отсутствует");
+            throw new NullPointerException("Переданный массив должен быть не null");
         }
 
         if (array.length == 0) {
@@ -56,14 +58,14 @@ public class Matrix {
 
         rows = new Vector[array.length];
 
-        for (int i = 0; i < columnsCount; i++) {
+        for (int i = 0; i < array.length; i++) {
             rows[i] = new Vector(columnsCount, array[i]);
         }
     }
 
     public Matrix(Vector[] vectors) {
         if (vectors == null) {
-            throw new NullPointerException("Массив векторов отсутствует");
+            throw new NullPointerException("Переданный массив векторов должен быть не null");
         }
 
         if (vectors.length == 0) {
@@ -96,8 +98,8 @@ public class Matrix {
 
     public Vector getRow(int index) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Индекс элемента строки должен находиться в диапазоне [0; " + (rows.length - 1)
-                    + "]. Индекс элемента строки: " + index);
+            throw new IndexOutOfBoundsException("Индекс строки должен находиться в диапазоне [0; " + (rows.length - 1)
+                    + "]. Индекс строки: " + index);
         }
 
         return new Vector(rows[index]);
@@ -105,17 +107,18 @@ public class Matrix {
 
     public void setRow(int index, Vector vector) {
         if (vector == null) {
-            throw new NullPointerException("Вектор отсутствует");
+            throw new NullPointerException("Вектор должен быть не null");
         }
 
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Индекс элемента строки должен находиться в диапазоне [0; " + (rows.length - 1)
-                    + "]. Индекс элемента строки: " + index);
+            throw new IndexOutOfBoundsException("Индекс строки должен находиться в диапазоне [0; " + (rows.length - 1)
+                    + "]. Индекс строки: " + index);
         }
 
         if (getColumnsCount() != vector.getComponentsCount()) {
-            throw new IllegalArgumentException("Количество строк в матрице и длина вектора отличаются. " +
-                    "Количество столбцов в матрице: " + getColumnsCount() + ". Длина вектора: " + vector.getComponentsCount());
+            throw new IllegalArgumentException("Количество строк в матрице и количество компонент вектора отличаются. " +
+                    "Количество столбцов в матрице: " + getColumnsCount()
+                    + ". Количество компонент вектора: " + vector.getComponentsCount());
         }
 
         rows[index] = new Vector(vector);
@@ -123,8 +126,8 @@ public class Matrix {
 
     public Vector getColumn(int index) {
         if (index < 0 || index >= getColumnsCount()) {
-            throw new IndexOutOfBoundsException("Индекс элемента столбца должен находиться в диапазоне [0; "
-                    + (getColumnsCount() - 1) + "]. Индекс элемента столбца: " + index);
+            throw new IndexOutOfBoundsException("Индекс столбца должен находиться в диапазоне [0; "
+                    + (getColumnsCount() - 1) + "]. Индекс столбца: " + index);
         }
 
         double[] columnComponentsArray = new double[rows.length];
@@ -207,14 +210,37 @@ public class Matrix {
         return stringBuilder.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+
+        Matrix matrix = (Matrix) obj;
+
+        return rows == matrix.rows;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 37;
+
+        return prime + (rows != null ? Arrays.hashCode(rows) : 0);
+    }
+
     public Vector multiply(Vector vector) {
         if (vector == null) {
-            throw new NullPointerException("Вектор отсутствует");
+            throw new NullPointerException("Вектор должен быть не null");
         }
 
         if (getColumnsCount() != vector.getComponentsCount()) {
-            throw new IllegalArgumentException("Количество столбцов в матрице и длина ветора должны совпадать. "
-                    + "Количество столбцов в матрице: " + getColumnsCount() + ". Длина вектора: " + vector.getComponentsCount());
+            throw new IllegalArgumentException("Количество столбцов в матрице и количество компонент вектора должны совпадать. "
+                    + "Количество столбцов в матрице: " + getColumnsCount()
+                    + ". Количество компонент вектора: " + vector.getComponentsCount());
         }
 
         Vector resultVector = new Vector(rows.length);
@@ -228,11 +254,11 @@ public class Matrix {
 
     private static void checkMatricesSizesEquality(Matrix matrix1, Matrix matrix2) {
         if (matrix1 == null) {
-            throw new NullPointerException("1-я матрица отсутствует");
+            throw new NullPointerException("1-я матрица не должна быть null");
         }
 
         if (matrix2 == null) {
-            throw new NullPointerException("2-я матрица отсутствует");
+            throw new NullPointerException("2-я матрица не должна быть null");
         }
 
         if (matrix1.rows.length != matrix2.rows.length || matrix1.getColumnsCount() != matrix2.getColumnsCount()) {
@@ -273,16 +299,16 @@ public class Matrix {
         Matrix result = new Matrix(matrix1);
         result.subtract(matrix2);
 
-        return new Matrix(result);
+        return result;
     }
 
     public static Matrix getProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1 == null) {
-            throw new NullPointerException("1-я матрица отсутствует");
+            throw new NullPointerException("1-я матрица не должна быть null");
         }
 
         if (matrix2 == null) {
-            throw new NullPointerException("2-я матрица отсутствует");
+            throw new NullPointerException("2-я матрица не должна быть null");
         }
 
         if (matrix1.getColumnsCount() != matrix2.rows.length) {
