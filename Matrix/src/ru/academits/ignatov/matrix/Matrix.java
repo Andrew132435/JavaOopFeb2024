@@ -116,9 +116,9 @@ public class Matrix {
         }
 
         if (getColumnsCount() != vector.getComponentsCount()) {
-            throw new IllegalArgumentException("Количество строк в матрице и количество компонент вектора отличаются. " +
+            throw new IllegalArgumentException("Количество строк в матрице и размерность вектора отличаются. " +
                     "Количество столбцов в матрице: " + getColumnsCount()
-                    + ". Количество компонент вектора: " + vector.getComponentsCount());
+                    + ". Размерность вектора: " + vector.getComponentsCount());
         }
 
         rows[index] = new Vector(vector);
@@ -222,14 +222,14 @@ public class Matrix {
 
         Matrix matrix = (Matrix) obj;
 
-        return rows == matrix.rows;
+        return Arrays.equals(rows, matrix.rows);
     }
 
     @Override
     public int hashCode() {
         final int prime = 37;
 
-        return prime + (rows != null ? Arrays.hashCode(rows) : 0);
+        return prime + Arrays.hashCode(rows);
     }
 
     public Vector multiply(Vector vector) {
