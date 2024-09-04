@@ -116,7 +116,7 @@ public class Matrix {
         }
 
         if (getColumnsCount() != vector.getComponentsCount()) {
-            throw new IllegalArgumentException("Количество строк в матрице и размерность вектора отличаются. " +
+            throw new IllegalArgumentException("Количество столбцов в матрице и размерность вектора отличаются. " +
                     "Количество столбцов в матрице: " + getColumnsCount()
                     + ". Размерность вектора: " + vector.getComponentsCount());
         }
