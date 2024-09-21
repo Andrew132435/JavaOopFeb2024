@@ -2,23 +2,23 @@ package ru.academits.ignatov.arraylist;
 
 import java.util.*;
 
-public class MyArrayList<E> implements List<E> {
+public class ArrayList<E> implements List<E> {
     private E[] items;
     private int size;
     private int modCount;
 
-    public MyArrayList() {
+    public ArrayList() {
         //noinspection unchecked
-        this.items = (E[]) new Object[10];
+        items = (E[]) new Object[10];
     }
 
-    public MyArrayList(int initialCapacity) {
+    public ArrayList(int initialCapacity) {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException("Вместимость списка не должна быть меньше 0. Вместимость равна: " + initialCapacity);
         }
 
         //noinspection unchecked
-        this.items = (E[]) new Object[initialCapacity];
+        items = (E[]) new Object[initialCapacity];
     }
 
     @Override
@@ -43,11 +43,22 @@ public class MyArrayList<E> implements List<E> {
     }
 
     @Override
+    public int lastIndexOf(Object o) {
+        for (int i = size - 1; i >= 0; i--) {
+            if (Objects.equals(items[i], o)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
     public boolean contains(Object o) {
         return indexOf(o) >= 0;
     }
 
-    public class MyIterator implements Iterator<E> {
+    public class ArrayListIterator implements Iterator<E> {
         private int currentIndex = -1;
         private final int expectedModCount = modCount;
 
@@ -73,7 +84,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new MyIterator();
+        return new ArrayListIterator();
     }
 
     @Override
@@ -99,15 +110,16 @@ public class MyArrayList<E> implements List<E> {
     }
 
     private static void checkIndex(int index, int maxIndex) {
-        if (index < 0 || index >= maxIndex) {
-            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне от 0 до " + (maxIndex - 1)
+        if (index < 0 || index > maxIndex) {
+            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне от 0 до " + maxIndex
                     + ". Индекс равен " + index);
         }
     }
 
     public void increaseCapacity() {
         if (items.length == 0) {
-            items = Arrays.copyOf(items, 10);
+            //noinspection unchecked
+            items = (E[]) new Object[10];
             return;
         }
 
@@ -134,13 +146,12 @@ public class MyArrayList<E> implements List<E> {
     @Override
     public boolean add(E e) {
         add(size, e);
-        modCount++;
         return true;
     }
 
     @Override
     public E remove(int index) {
-        checkIndex(index, size);
+        checkIndex(index, size - 1);
 
         E removedItem = items[index];
 
@@ -169,10 +180,6 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        if (c.isEmpty()) {
-            return true;
-        }
-
         for (Object object : c) {
             if (!contains(object)) {
                 return false;
@@ -196,7 +203,7 @@ public class MyArrayList<E> implements List<E> {
             return false;
         }
 
-        ensureCapacity((size + c.size()));
+        ensureCapacity(size + c.size());
 
         if (index != size) {
             System.arraycopy(items, index, items, index + c.size(), size - index);
@@ -275,30 +282,19 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-        checkIndex(index, size);
+        checkIndex(index, size - 1);
 
         return items[index];
     }
 
     @Override
-    public E set(int index, E element) {
+    public E set(int index, E item) {
         checkIndex(index, size - 1);
 
         E oldItem = items[index];
-        items[index] = element;
+        items[index] = item;
 
         return oldItem;
-    }
-
-    @Override
-    public int lastIndexOf(Object o) {
-        for (int i = size - 1; i >= 0; i--) {
-            if (Objects.equals(items[i], o)) {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     @Override
@@ -347,21 +343,19 @@ public class MyArrayList<E> implements List<E> {
         }
 
         //noinspection unchecked
-        MyArrayList<E> arrayList = (MyArrayList<E>) obj;
+        ArrayList<E> arrayList = (ArrayList<E>) obj;
 
         if (size != arrayList.size) {
             return false;
         }
 
-        boolean hasEqual = true;
-
         for (int i = 0; i < size; i++) {
-            if (!items[i].equals(arrayList.get(i))) {
+            if (!Objects.equals(items[i], arrayList.items[i])) {
                 return false;
             }
         }
 
-        return hasEqual;
+        return true;
     }
 
     @Override
@@ -370,7 +364,7 @@ public class MyArrayList<E> implements List<E> {
         int hash = 1;
 
         for (E item : items) {
-            hash += prime * hash + Double.hashCode((Double) item);
+            hash += prime * hash + Objects.hashCode(item);
         }
 
         return hash;
