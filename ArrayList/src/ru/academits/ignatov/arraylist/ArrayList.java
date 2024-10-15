@@ -297,6 +297,12 @@ public class ArrayList<E> implements List<E> {
         return oldItem;
     }
 
+    public void trimToSize() {
+        if (size < items.length) {
+            items = Arrays.copyOf(items, size);
+        }
+    }
+
     @Override
     public ListIterator<E> listIterator() {
         //noinspection DataFlowIssue
@@ -363,8 +369,8 @@ public class ArrayList<E> implements List<E> {
         final int prime = 37;
         int hash = 1;
 
-        for (E item : items) {
-            hash += prime * hash + Objects.hashCode(item);
+        for (int i = 0; i < size; i++) {
+            hash = prime * hash + Objects.hashCode(items[i]);
         }
 
         return hash;

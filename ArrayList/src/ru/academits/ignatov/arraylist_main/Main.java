@@ -9,5 +9,7 @@ public class Main {
 
         ArrayList<Integer> intArrayList = new ArrayList<>(20);
         System.out.println(intArrayList);
+
+        intArrayList.trimToSize();
     }
 }
