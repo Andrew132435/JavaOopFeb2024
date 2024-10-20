@@ -13,8 +13,8 @@ public class HashTable<E> implements Collection<E> {
     }
 
     public HashTable(int initialCapacity) {
-        if (initialCapacity < 0) {
-            throw new IllegalArgumentException("Вместимость списка не должна быть меньше 0. " +
+        if (initialCapacity <= 0) {
+            throw new IllegalArgumentException("Вместимость хэш-таблицы не должна быть меньше 1. " +
                     "Вместимость равна: " + initialCapacity);
         }
 
@@ -60,11 +60,7 @@ public class HashTable<E> implements Collection<E> {
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-        if (buckets[index] == null) {
-            return false;
-        }
-
-        return buckets[index].contains(o);
+        return buckets[index] != null && buckets[index].contains(o);
     }
 
     private class HashTableIterator implements Iterator<E> {
@@ -81,11 +77,11 @@ public class HashTable<E> implements Collection<E> {
         @Override
         public E next() {
             if (!hasNext()) {
-                throw new NoSuchElementException("В хэштаблице закончились элементы");
+                throw new NoSuchElementException("В хэш-таблице закончились элементы");
             }
 
             if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException("За время обхода хэштаблица была изменена");
+                throw new ConcurrentModificationException("За время обхода хэш-таблица была изменена");
             }
 
             while (bucketIndex < buckets.length) {
@@ -99,7 +95,7 @@ public class HashTable<E> implements Collection<E> {
                 bucketItemIndex = -1;
             }
 
-            throw new NoSuchElementException("В хэштаблице закончились элементы");
+            throw new NoSuchElementException("В хэш-таблице закончились элементы");
         }
     }
 
@@ -110,11 +106,15 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public void clear() {
-        if (size == 0) {
+        if (isEmpty()) {
             return;
         }
 
-        Arrays.fill(buckets, 0, size, null);
+        for (List<E> bucket : buckets) {
+            if (bucket != null) {
+                bucket.clear();
+            }
+        }
 
         size = 0;
         modCount++;
@@ -154,9 +154,11 @@ public class HashTable<E> implements Collection<E> {
     public boolean remove(Object o) {
         int index = getIndex(o);
 
-        if (contains(o)) {
-            buckets[index].remove(o);
+        if (buckets[index] == null) {
+            return false;
+        }
 
+        if (buckets[index].remove(o)) {
             size--;
             modCount++;
 
@@ -196,15 +198,25 @@ public class HashTable<E> implements Collection<E> {
             return false;
         }
 
-        boolean isChanged = false;
+        int oldSize = size;
 
-        for (Object item : c) {
-            while (remove(item)) {
-                isChanged = true;
+        for (List<E> bucket : buckets) {
+            if (bucket != null) {
+                int bucketSize = bucket.size();
+
+                if (bucket.removeAll(c)) {
+                    size -= bucketSize - bucket.size();
+                }
             }
         }
 
-        return isChanged;
+        boolean isModified = oldSize != size;
+
+        if (isModified) {
+            ++modCount;
+        }
+
+        return isModified;
     }
 
     @Override
@@ -213,7 +225,7 @@ public class HashTable<E> implements Collection<E> {
             return false;
         }
 
-        int initSize = size;
+        int initialSize = size;
 
         for (List<E> bucket : buckets) {
             if (bucket != null) {
@@ -223,11 +235,11 @@ public class HashTable<E> implements Collection<E> {
             }
         }
 
-        if (initSize != size) {
+        if (initialSize != size) {
             modCount++;
         }
 
-        return initSize != size;
+        return initialSize != size;
     }
 
     @Override
