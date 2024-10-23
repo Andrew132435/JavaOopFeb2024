@@ -202,10 +202,10 @@ public class HashTable<E> implements Collection<E> {
 
         for (List<E> bucket : buckets) {
             if (bucket != null) {
-                int bucketSize = bucket.size();
+                int listSize = bucket.size();
 
                 if (bucket.removeAll(c)) {
-                    size -= bucketSize - bucket.size();
+                    size -= listSize - bucket.size();
                 }
             }
         }
@@ -225,21 +225,25 @@ public class HashTable<E> implements Collection<E> {
             return false;
         }
 
-        int initialSize = size;
+        int oldSize = size;
 
         for (List<E> bucket : buckets) {
             if (bucket != null) {
-                size -= bucket.size();
-                bucket.retainAll(c);
-                size += bucket.size();
+                int listSize = bucket.size();
+
+                if (bucket.retainAll(c)) {
+                    size -= listSize - bucket.size();
+                }
             }
         }
 
-        if (initialSize != size) {
-            modCount++;
+        boolean isModified = oldSize != size;
+
+        if (isModified) {
+            ++modCount;
         }
 
-        return initialSize != size;
+        return isModified;
     }
 
     @Override
@@ -251,9 +255,7 @@ public class HashTable<E> implements Collection<E> {
         StringBuilder stringBuilder = new StringBuilder("[");
 
         for (List<E> bucket : buckets) {
-            if (bucket != null && !bucket.isEmpty()) {
-                stringBuilder.append(bucket).append(", ");
-            }
+            stringBuilder.append(bucket).append(", ");
         }
 
         return stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append(']').toString();
