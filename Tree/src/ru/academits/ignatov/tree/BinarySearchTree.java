@@ -99,65 +99,65 @@ public class BinarySearchTree<E> {
         }
     }
 
-    public boolean delete(E data) {
+    public boolean remove(E data) {
         if (root == null) {
             return false;
         }
 
-        TreeNode<E> nodeToRemove = root;
-        TreeNode<E> parentNode = null;
+        TreeNode<E> removedNode = root;
+        TreeNode<E> removedNodeParent = null;
         boolean isLeft = false;
 
-        while (nodeToRemove != null) {
-            int comparisonResult = compare(data, nodeToRemove.getData());
+        while (removedNode != null) {
+            int comparisonResult = compare(data, removedNode.getData());
 
             if (comparisonResult == 0) {
                 break;
             }
 
-            parentNode = nodeToRemove;
+            removedNodeParent = removedNode;
 
             if (comparisonResult < 0) {
                 isLeft = true;
-                nodeToRemove = nodeToRemove.getLeft();
+                removedNode = removedNode.getLeft();
             } else {
                 isLeft = false;
-                nodeToRemove = nodeToRemove.getRight();
+                removedNode = removedNode.getRight();
             }
         }
 
-        if (nodeToRemove == null) {
+        if (removedNode == null) {
             return false;
         }
 
         TreeNode<E> successorNode;
 
-        if (nodeToRemove.getLeft() == null || nodeToRemove.getRight() == null) {
-            successorNode = (nodeToRemove.getLeft() == null) ? nodeToRemove.getRight() : nodeToRemove.getLeft();
+        if (removedNode.getLeft() == null || removedNode.getRight() == null) {
+            successorNode = (removedNode.getLeft() == null) ? removedNode.getRight() : removedNode.getLeft();
         } else {
-            TreeNode<E> minNode = nodeToRemove.getRight();
-            TreeNode<E> minNodeParent = nodeToRemove;
+            TreeNode<E> minNode = removedNode.getRight();
+            TreeNode<E> minNodeParent = removedNode;
 
             while (minNode.getLeft() != null) {
                 minNodeParent = minNode;
                 minNode = minNode.getLeft();
             }
 
-            if (minNodeParent != nodeToRemove) {
+            if (minNodeParent != removedNode) {
                 minNodeParent.setLeft(minNode.getRight());
-                minNode.setRight(nodeToRemove.getRight());
+                minNode.setRight(removedNode.getRight());
             }
 
-            minNode.setLeft(nodeToRemove.getLeft());
+            minNode.setLeft(removedNode.getLeft());
             successorNode = minNode;
         }
 
-        if (parentNode == null) {
+        if (removedNodeParent == null) {
             root = successorNode;
         } else if (isLeft) {
-            parentNode.setLeft(successorNode);
+            removedNodeParent.setLeft(successorNode);
         } else {
-            parentNode.setRight(successorNode);
+            removedNodeParent.setRight(successorNode);
         }
 
         size--;

@@ -21,15 +21,15 @@ public class TreeNode<E> {
         return left;
     }
 
-    public void setLeft(TreeNode<E> leftChild) {
-        left = leftChild;
+    public void setLeft(TreeNode<E> left) {
+        this.left = left;
     }
 
     public TreeNode<E> getRight() {
         return right;
     }
 
-    public void setRight(TreeNode<E> rightChild) {
-        right = rightChild;
+    public void setRight(TreeNode<E> right) {
+        this.right = right;
     }
 }
